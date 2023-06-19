@@ -1,25 +1,68 @@
-{
-  "name": "qr-transfer-app",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@types/node": "20.3.1",
-    "@types/react": "18.2.12",
-    "@types/react-dom": "18.2.5",
-    "autoprefixer": "10.4.14",
-    "eslint": "8.43.0",
-    "eslint-config-next": "13.4.6",
-    "next": "13.4.6",
-    "postcss": "8.4.24",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "tailwindcss": "3.3.2",
-    "typescript": "5.1.3"
-  }
+import { useState, useEffect, useRef } from 'react';
+import dynamic from 'next/dynamic';
+import QRCode from 'qrcode.react';
+import jsQR from 'jsqr';
+
+export default function Home() {
+  const [mode, setMode] = useState<'send' | 'receive' | null>(null);
+  const [data, setData] = useState('');
+  const [receivedData, setReceivedData] = useState<string[]>([]);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    if (mode === 'receive' && videoRef.current) {
+      navigator.mediaDevices
+        .getUserMedia({ video: { facingMode: 'environment' } })
+        .then((stream) => {
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+          }
+
+          const track = stream.getVideoTracks()[0];
+          const imageCapture = new ImageCapture(track);
+
+          const scan = () => {
+            imageCapture
+              .grabFrame()
+              .then((bitmap) => {
+                const context = new OffscreenCanvas(bitmap.width, bitmap.height).getContext('2d');
+                if (context) {
+                  context.drawImage(bitmap, 0, 0, bitmap.width, bitmap.height);
+                  const imageData = context.getImageData(0, 0, bitmap.width, bitmap.height);
+                  const code = jsQR(imageData.data, imageData.width, imageData.height);
+                  if (code && code.data) {
+                    setReceivedData((oldData) => [...oldData, code.data]);
+                  }
+                }
+              })
+              .finally(() => {
+                requestAnimationFrame(scan);
+              });
+          };
+
+          scan();
+        });
+    }
+  }, [mode]);
+
+  return (
+    <div>
+      <button onClick={() => setMode('send')}>Send</button>
+      <button onClick={() => setMode('receive')}>Receive</button>
+
+      {mode === 'send' && (
+        <div>
+          <textarea onChange={(e) => setData(e.target.value)} />
+          <QRCode value={data} />
+        </div>
+      )}
+
+      {mode === 'receive' && (
+        <div>
+          <video ref={videoRef} autoPlay />
+          <p>Received: {receivedData.join(',')}</p>
+        </div>
+      )}
+    </div>
+  );
 }
