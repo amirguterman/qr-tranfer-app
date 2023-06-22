@@ -1,34 +1,61 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# qr-transfer-app - A Data Transmission Application
 
-## Getting Started
+qr-transfer-app is a NextJS application designed to transmit and receive data by generating multiple frames of QR codes in GIF animation format from text files. This application uses the monitor as an interface to communicate the data.
 
-First, run the development server:
+## Table of Contents
+- [Installation](#installation)
+- [Usage](#usage)
+- [Technology Used](#technology-used)
+- [Contributing](#contributing)
+- [License](#license)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+## Installation
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Before running the app, ensure that you have Node.js and npm installed. You can check this by running `node -v` and `npm -v` in your terminal/command prompt.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To install the app:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+1. Clone this repository to your local machine:
+    ```bash
+    git clone https://github.com/username/qr-transfer-app.git
+    ```
+2. Navigate to the repository:
+    ```bash
+    cd qr-transfer-app
+    ```
+3. Install the dependencies:
+    ```bash
+    npm install
+    ```
 
-## Learn More
+## Usage
 
-To learn more about Next.js, take a look at the following resources:
+1. To start the app, run:
+    ```bash
+    npm run dev
+    ```
+2. Navigate to `http://localhost:3000` on your web browser.
+3. Choose either `Send` or `Receive` mode. 
+   - `Send` mode: Input data into the provided text area, which will be converted into a QR code.
+   - `Receive` mode: Start receiving QR code data through your webcam. The received data will be displayed below the video stream.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Technology Used
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+This application is built using the following technologies:
 
-## Deploy on Vercel
+- [Next.js](https://nextjs.org/)
+- [React](https://reactjs.org/)
+- [qrcode.react](https://www.npmjs.com/package/qrcode.react): A React component to generate and display QR Codes.
+- [jsQR](https://www.npmjs.com/package/jsqr): A cross-platform JavaScript library to decode QR codes.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contributing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Contributions are always welcome! Please read the [contribution guidelines](CONTRIBUTING.md) first.
+
+## License
+
+[MIT](LICENSE.md)
+
+## Acknowledgements
+
+We would like to acknowledge the creators of the libraries and frameworks used in this application.
